@@ -71,7 +71,9 @@ class DoublyLinked:
             if i == int(index)-1:
               nn.next = cur.next
               cur.next = nn
-              cur.prev.next = nn
+              nn.prev = None
+              nn.prev = cur.prev 
+              cur = nn
             cur = cur.next
 
     def insert_before(self, temp_node, data): # Inserting a new node before a given node
@@ -104,7 +106,7 @@ for i in inp:
         dl.append(i[2:])
     elif i[:1] == "I":
         a = i[2:].split(":")
-        dl.insert_before(a[0],a[1]) 
+        dl.insert(a[0],a[1]) 
         if dl.isEmpty() and a[0]!=0:
             print("Data cannot be added")
         else:
@@ -116,7 +118,5 @@ for i in inp:
             print("removed :",i[1:],"from index :")
     print("Linked List :", dl.__str__())
     print("reverse :", dl.str_reverse())
-
-
 
 #A 3,A 4,Ab 0,I 1:2
