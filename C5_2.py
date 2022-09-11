@@ -64,17 +64,23 @@ class DoublyLinked:
     def insert(self, index, data):
         nn = Node(data)
         cur = self.head
+        i = 0
         if int(index) == 0:
           self.add_before(data)
         else:
-          for i in range(0,self.size()):
-            if i == int(index)-1:
-              nn.next = cur.next
-              cur.next = nn
-              nn.prev = None
-              nn.prev = cur.prev 
-              cur = nn
-            cur = cur.next
+        #   for i in range(0,self.size()):
+            while cur:
+                if i == int(index)-1:
+                    nn.next = cur.next
+                    cur.next = nn
+                #   nn.prev = None
+                #   nn.prev = cur.prev
+                #   cur.prev = nn
+                if i == int(index)+1:
+                    nn.prev = cur.prev
+                    cur.prev = nn
+                i += 1
+                cur = cur.next
 
     def insert_before(self, temp_node, data): # Inserting a new node before a given node
         nn = Node(data)
@@ -100,6 +106,7 @@ dl = DoublyLinked()
 inp = input("Enter input : ").split(',')
 
 for i in inp:
+    n = 0
     if i[:2] == "Ab":
         dl.add_before(i[3:])
     elif i[:1] == "A":
@@ -117,6 +124,7 @@ for i in inp:
         else:
             print("removed :",i[1:],"from index :")
     print("Linked List :", dl.__str__())
+    #print(str(dl.head))
     print("reverse :", dl.str_reverse())
 
 #A 3,A 4,Ab 0,I 1:2
