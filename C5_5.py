@@ -128,6 +128,7 @@ def scarmble(head, b, r, size):
     for i in range(0,UP.size()):
         if i >= NR:
             LO.append(UP.pop(NR))
+    DLO = LO.size()
     # print("UP",printLL(UP))
     # print("LO",printLL(LO))
     for i in range(0,size):
@@ -138,16 +139,20 @@ def scarmble(head, b, r, size):
                 UP.append(LO.pop(0))
         n += 2
     print("Riffle",FR,"% :",UP.__str__())
+
     n = 1
     for i in range(0,size):
-        if i < NR:
-            LO.appen(UP.pop(n))
+        if i < DLO:
+            UP.append(UP.pop(n))
         n+=1
-    #print("Deriffle",FR,"% :",UP.__str__())
-    #print("VALUE =",NB)
-    #print("BottomUp",FB,"% :",UP.__str__())
-    #print(LO.__str__())
-    
+    print("Deriffle",FR,"% :",UP.__str__())
+
+    for i in range(0,size):
+        if i < NB:
+            UP.addHead(UP.pop(-1))
+    print("Debuttom",FB,"% :",UP.__str__())
+
+# ---------------------- Program ---------------------- #  
 
 inp1, inp2 = input('Enter Input : ').split('/')
 print('-' * 50)
