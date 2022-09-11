@@ -1,82 +1,167 @@
 class Node:
-    def __init__(self, data):
-        self.item = data
-        self.next = None
-        self.prev = None
-# Class for doubly Linked List
-class doublyLinkedList:
-    def __init__(self):
-        self.start_node = None
-    # Insert Element to Empty list
-    def InsertToEmptyList(self, data):
-        if self.start_node is None:
-            new_node = Node(data)
-            self.start_node = new_node
+  def __init__(self, data):
+    self.data = data #adding an element to the node
+    self.next = None # Initally this node will not be linked with any other node
+    self.prev = None # It will not be linked in either direction
+
+
+# Creating a doubly linked list class
+class DoublyLinkedList:
+  def __init__(self):
+    self.head = None # Initally there are no elements in the list
+    self.tail = None
+
+  def __str__(self):
+    if self.isEmpty():
+        return "Empty"
+    cur, s = self.head, str(self.head.data)
+    while cur.next != None:
+        cur = cur.next
+        s += "->"+str(cur.data)
+    return s
+
+  def str_reverse(self):
+    if self.isEmpty():
+        return "Empty"
+    cur, s = self.tail, str(self.tail.data)
+    while cur.prev != None:
+        cur = cur.prev
+        s += "->"+str(cur.data)
+    return s
+
+  def isEmpty(self):
+    return self.head == None
+
+  def size(self):
+    s, cur = 0, self.head
+    while cur:
+        cur = cur.next
+        s += 1
+    return s
+
+  def add_before(self, new_data): # Adding an element before the first element
+    new_node = Node(new_data) # creating a new node with the desired value
+    new_node.next = self.head # newly created node's next pointer will refer to the old head
+
+    if self.head != None: # Checks whether list is empty or not
+        self.head.prev = new_node # old head's previous pointer will refer to newly created node
+        self.head = new_node # new node becomes the new head
+        new_node.prev = None
+    
+    else: # If the list is empty, make new node both head and tail
+      self.head = new_node
+      self.tail = new_node
+      new_node.prev = None # There's only one element so both pointers refer to null
+    
+
+  def append(self, new_data): # Adding an element after the last element
+      new_node = Node(new_data)
+      new_node.prev = self.tail
+
+      if self.tail == None: # checks whether the list is empty, if so make both head and tail as new node
+        self.head = new_node 
+        self.tail = new_node
+        new_node.next = None # the first element's previous pointer has to refer to null
+              
+      else: # If list is not empty, change pointers accordingly
+        self.tail.next = new_node
+        new_node.next = None
+        self.tail = new_node # Make new node the new tail
+    
+
+  def peek_front(self): # returns first element
+    if self.head == None: # checks whether list is empty or not
+      print("List is empty")
+    else:
+      return self.head.data
+
+  
+  def peek_back(self): # returns last element
+    if self.tail == None: # checks whether list is empty or not
+      print("List is empty")
+    else:
+      return self.tail.data
+  
+
+  def pop_front(self): # removes and returns the first element
+    if self.head == None:
+      print("List is empty")
+    
+    else:
+      temp = self.head
+      temp.next.prev = None # remove previous pointer referring to old head
+      self.head = temp.next # make second element the new head
+      temp.next = None # remove next pointer referring to new head
+      return temp.data
+  
+  
+  def pop_back(self): # removes and returns the last element
+    if self.tail == None:
+      print("List is empty")
+
+    else:
+      temp = self.tail
+      temp.prev.next = None # removes next pointer referring to old tail
+      self.tail = temp.prev # make second to last element the new tail
+      temp.prev = None # remove previous pointer referring to new tail
+      return temp.data
+  
+
+  def insert_after(self, temp_node, new_data): # Inserting a new node after a given node
+    if temp_node == None:
+      print("Given node is empty")
+    
+    if temp_node != None:
+      new_node = Node(new_data)
+      new_node.next = temp_node.next
+      temp_node.next = new_node
+      new_node.prev = temp_node
+      if new_node.next != None:
+        new_node.next.prev = new_node
+      
+      if temp_node == self.tail: # checks whether new node is being added to the last element
+        self.tail = new_node # makes new node the new tail
+    
+
+  
+  def insert_before(self, temp_node, new_data, index): # Inserting a new node before a given node
+    if temp_node == None:
+      print("Given node is empty")
+    #temp_node = self.head
+    for i in range(0,self.size()):
+      #if i == index:
+        if temp_node != None:
+          new_node = Node(new_data)
+          new_node.prev = temp_node.prev
+          temp_node.prev = new_node
+          new_node.next = temp_node
+          if new_node.prev != None:
+            new_node.prev.next = new_node
+          
+          if temp_node == self.head: # checks whether new node is being added before the first element
+            self.head = new_node # makes new node the new head
+
+# ------------- Program -------------- #
+dl = DoublyLinkedList()
+inp = input("Enter input : ").split(',')
+
+for i in inp:
+    if i[:2] == "Ab":
+        dl.add_before(i[3:])
+    elif i[:1] == "A":
+        dl.append(i[2:])
+    elif i[:1] == "I":
+        a = i[2:].split(":")
+        dl.insert_before(dl.head.next,a[1]) 
+        if dl.isEmpty() and a[0]!=0:
+            print("Data cannot be added")
         else:
-            print("The list is empty")
-    # Insert element at the end
-    def InsertToEnd(self, data):
-        # Check if the list is empty
-        if self.start_node is None:
-            new_node = Node(data)
-            self.start_node = new_node
-            return
-        n = self.start_node
-        # Iterate till the next reaches NULL
-        while n.next is not None:
-            n = n.next
-        new_node = Node(data)
-        n.next = new_node
-        new_node.prev = n
-    # Delete the elements from the start
-    def DeleteAtStart(self):
-        if self.start_node is None:
-            print("The Linked list is empty, no element to delete")
-            return 
-        if self.start_node.next is None:
-            self.start_node = None
-            return
-        self.start_node = self.start_node.next
-        self.start_prev = None;
-    # Delete the elements from the end
-    def delete_at_end(self):
-        # Check if the List is empty
-        if self.start_node is None:
-            print("The Linked list is empty, no element to delete")
-            return 
-        if self.start_node.next is None:
-            self.start_node = None
-            return
-        n = self.start_node
-        while n.next is not None:
-            n = n.next
-        n.prev.next = None
-    # Traversing and Displaying each element of the list
-    def Display(self):
-        if self.start_node is None:
-            print("The list is empty")
-            return
+            print("index =", a[0],"and data =", a[1])
+    elif i[:1] == "R":
+        if dl.isEmpty() and a[0]!=0:
+            print("Not Found!")
         else:
-            n = self.start_node
-            while n is not None:
-                print("", n.item,end=(''))
-                n = n.next
-        print("\n")
-# Create a new Doubly Linked List
-NewDoublyLinkedList = doublyLinkedList()
-# Insert the element to empty list
-NewDoublyLinkedList.InsertToEmptyList(10)
-# Insert the element at the end
-NewDoublyLinkedList.InsertToEnd(20)
-NewDoublyLinkedList.InsertToEnd(30)
-NewDoublyLinkedList.InsertToEnd(40)
-NewDoublyLinkedList.InsertToEnd(50)
-NewDoublyLinkedList.InsertToEnd(60)
-# Display Data
-NewDoublyLinkedList.Display()
-# Delete elements from start
-NewDoublyLinkedList.DeleteAtStart()
-# Delete elements from end
-NewDoublyLinkedList.DeleteAtStart()
-# Display Data
-NewDoublyLinkedList.Display()
+            print("removed :",i[1:],"from index :")
+    print("Linked List :", dl.__str__())
+    #print(str(dl.head))
+    print("reverse :", dl.str_reverse())
