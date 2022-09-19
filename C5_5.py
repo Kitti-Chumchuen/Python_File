@@ -129,28 +129,52 @@ def scarmble(head, b, r, size):
         if i >= NR:
             LO.append(UP.pop(NR))
     DLO = LO.size()
+    DUP = UP.size()
+    # print("R Value",NR)
+    # print("B Value",NB)
     # print("UP",printLL(UP))
     # print("LO",printLL(LO))
-    for i in range(0,size):
-        if not LO.isEmpty():
-            if i <= UP.size():
-                UP.addBY(n,LO.pop(0))
-            else:
+    if NR > 1:
+        for i in range(0,size):
+            if not LO.isEmpty():
+                if i < NR:
+                    UP.addBY(n,LO.pop(0))
+                else:
+                    UP.append(LO.pop(0))
+            n += 2
+        print("Riffle",FR,"% :",UP.__str__())
+    elif NR>0 and NR<=1:
+        for i in range(0,size):
+            if not LO.isEmpty():
                 UP.append(LO.pop(0))
-        n += 2
-    print("Riffle",FR,"% :",UP.__str__())
+        print("Riffle",FR,"% :",UP.__str__())
+    # print("DLO :",DLO)
+    if NR>NB and NR>1 or NR==NB :
+        n = 1
+        for i in range(0,size):
+            if i < DLO:
+                UP.append(UP.pop(n))
+                #print("++",UP.__str__())
+            if i<DUP-1:
+                n+=1
 
-    n = 1
-    for i in range(0,size):
-        if i < DLO:
-            UP.append(UP.pop(n))
-        n+=1
+    if NB>NR and NR>1:
+        n = 1
+        for i in range(0,size):
+            if i < NR:
+                LO.addHead(UP.pop(n))
+            n += 1
+        # print("LO =",LO.__str__())
+        for i in range(0,size):
+            if not LO.isEmpty():
+                UP.addBY(NR,LO.pop(0))
+                
     print("Deriffle",FR,"% :",UP.__str__())
-
+    
     for i in range(0,size):
-        if i < NB:
-            UP.addHead(UP.pop(-1))
-    print("Debuttom",FB,"% :",UP.__str__())
+        if i < size-NB:
+            UP.append(UP.pop(0))
+    print("Debottomup",FB,"% :",UP.__str__())
 
 # ---------------------- Program ---------------------- #  
 
@@ -158,7 +182,7 @@ inp1, inp2 = input('Enter Input : ').split('/')
 print('-' * 50)
 h = createLL(inp1.split())
 for i in inp2.split('|'):
-    print("Start : ",printLL(h))
+    print("Start :",printLL(h))
     k = i.split(',')
     if k[0][0] == "B" and k[1][0] == "R":
         scarmble(h, float(k[0][2:]), float(k[1][2:]), SIZE(h))
