@@ -1,67 +1,44 @@
 class Node:
-    def __init__(self, value):
-        self.value = value
-        self.next = None
-
-class Stack:
- 
-    # Initializing a stack.
-    # Use a dummy node, which is
-    # easier for handling edge cases.
-    def __init__(self):
-        self.head = Node("head")
-        self.size = 0
- 
-    # String representation of the stack
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+    
     def __str__(self):
-        cur = self.head.next
-        out = ""
-        while cur:
-            out += str(cur.value) + "->"
-            cur = cur.next
-        return out[:-3]
- 
-    # Get the current size of the stack
-    def getSize(self):
-        return self.size
- 
-    # Check if the stack is empty
-    def isEmpty(self):
-        return self.size == 0
- 
-    # Get the top item of the stack
-    def peek(self):
- 
-        # Sanitary check to see if we
-        # are peeking an empty stack.
-        if self.isEmpty():
-            raise Exception("Peeking from an empty stack")
-        return self.head.next.value
- 
-    # Push a value into the stack.
-    def push(self, value):
-        node = Node(value)
-        node.next = self.head.next
-        self.head.next = node
-        self.size += 1
- 
-    # Remove a value from the stack and return.
-    def pop(self):
-        if self.isEmpty():
-            raise Exception("Popping from an empty stack")
-        remove = self.head.next
-        self.head.next = self.head.next.next
-        self.size -= 1
-        return remove.value
+        return str(self.data)
 
-if __name__ == "__main__":
-    stack = Stack()
-    for i in range(1, 5):
-        stack.push(i)
-        print('+',i,'+')
-    print(f"Stack: {stack}")
- 
-    for _ in range(1, 3):
-        remove = stack.pop()
-        print(f"Pop: {remove}")
-    print(f"Stack: {stack}")
+class BST:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, data):
+        nn = Node(data)
+        if self.root != None:
+            if data < self.root:
+                if self.root.left:
+                    nn.left = self.root.left
+                    self.root.left.left = nn
+                else:
+                    self.root.left = nn
+            elif data > self.root:
+                if self.root.right:
+                    nn.right = self.root.right
+                    self.root.right.right = nn
+                else:
+                    self.root.right = nn
+        else:
+            self.root = data
+        print(data)
+
+    
+    def printTree(self, node, level = 0):
+        if node != None:
+            self.printTree(node.right, level + 1)
+            print('     ' * level, node)
+            self.printTree(node.left, level + 1)
+
+T = BST()
+inp = [int(i) for i in input('Enter Input : ').split()]
+for i in inp:
+    root = T.insert(i)
+T.printTree(root)
