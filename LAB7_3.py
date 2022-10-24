@@ -40,28 +40,17 @@ class BST:
                         cur = cur.left
         return self.root
     
-    def time3(self, node, k):
-        curR = node
-        curL = node 
+    def is_more_than_k(self, node, k):
         if node != None:
-            while curL.left != None:
-                print(curL.data,"L")
-                if int(curL.data) > int(k):
-                    n = int(curL.left.data)
-                    nn = Node(n*3)
-                    curL.left = nn 
-                #print(str(curL.data))
-                curL = curL.left
+            self.is_more_than_k(node.right, k)
+            if int(node.data) > int(k):
+                n = int(node.data)
+                n = n * 3
+                node.data = n
+            self.is_more_than_k(node.left, k)
 
-            while curR != None:
-                print(curR.data,"R")
-                if int(curR.data) > int(k):
-                    n = int(curR.right.data)
-                    nn = Node(n*3)
-                    curR.right = nn 
-                #print(str(curR.data))
-                curR = curR.right 
-        return self.root
+        return node
+
 
     def printTree(self, node, level = 0):
         if node != None:
@@ -84,5 +73,5 @@ for i in inp:
     root = T.insert(i)
 T.printTree(root)
 print("--------------------------------------------------")
-T.time3(root, k)
+root = T.is_more_than_k(root, k)
 T.printTree(root)
