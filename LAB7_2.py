@@ -49,12 +49,12 @@ class BST:
         if node != None:
             while curL.left != None:
                 L += str(curL.left.data)
-                #print(l,":",L)
+                print(l,":",L)
                 curL = curL.left
                 l += 1
             while curR.right != None:
                 R += str(curR.right.data)
-                #print(r,":",R)
+                print(r,":",R)
                 curR = curR.right
                 r += 1
             
@@ -67,7 +67,18 @@ class BST:
         elif r == l:
             return r
         else:
-            return 
+            return -1
+
+    def height(self, node):
+        if node == None:
+            return 0
+        #print(node.data, end=(" "))
+        leftH = self.height(node.left)
+        rightH = self.height(node.right)
+        print(leftH," ",rightH, end=(" "))
+        print(max(leftH, rightH))
+
+        return max(leftH, rightH) + 1
 
     def printTree(self, node, level = 0):
         if node != None:
@@ -76,9 +87,14 @@ class BST:
             self.printTree(node.left, level + 1)
 
 T = BST()
-inp = [int(i) for i in input('Enter Input : ').split()]
+inp = input('Enter Input : ').split(",")
 for i in inp:
-    root = T.insert(i)
+    if i[:1] == "i":
+        root = T.insert(i[2:])
+        print("insert",i[2:])
+        T.printTree(root)
 
-a = T.count(root)
-print("Height of this tree is :",a)
+#a = T.height(root)
+# T.printTree(root)
+# print("")
+#print("Height of this tree is :",a-1)
