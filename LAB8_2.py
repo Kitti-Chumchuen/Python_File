@@ -1,124 +1,66 @@
 class Node:
-
-    def __init__ (self, data):
+    def __init__(self, data):
         self.data = data
-        self.right = None
         self.left = None
-        self.height = 1
+        self.right = None
+    
+    def __str__(self):
+        return str(self.data)
 
-class AVL_Tree:
+class BST:
+    def __init__(self):
+        self.root = None
 
-    #  def __init__ (self, node, item):
-    #     self.right = None
-    #     self.left = None
-
-    def insert(self, root, data):
-     
-        # Step 1 - Perform normal BST
-        if not root:
-            return Node(data)
-        elif data < root.data:
-            root.left = self.insert(root.left, data)
+    def insert(self, data):  
+        if self.root == None:
+            nn = Node(data)
+            self.root = nn
         else:
-            root.right = self.insert(root.right, data)
+            cur = self.root
+            while cur:
+                if data > cur.data:
+                    if cur.right == None:
+                        nn = Node(data)
+                        cur.right = nn
+                        break
+                    else:
+                        cur = cur.right
+                else:
+                    if cur.left == None:
+                        nn = Node(data)
+                        cur.left = nn
+                        break
+                    else:
+                        cur = cur.left
+        return self.root
+    
+    def printTree(self, node, level = 0):
+        if node != None:
+            self.printTree(node.right, level + 1)
+            print('     ' * level, node)
+            self.printTree(node.left, level + 1)
 
-        root.height = 1 + max(self.getHeight(root.left),
-                           self.getHeight(root.right))
+    def closest_value(self, root, value):
+        a = int(root.data)
+        if value == a:
+            return a
+        else:
+            kid = root.left if value < a else root.right
+            if not kid:
+                return a
+            b = self.closest_value(kid, value)
+            return min((a,b), key=lambda x: abs(value-x))
 
-        balance = self.getBalance(root)
-
-        if balance > 1 and data < root.left.data:
-            return self.rightRotate(root)
- 
-        if balance < -1 and data > root.right.data:
-            return self.leftRotate(root)
-
-        if balance > 1 and data > root.left.data:
-            root.left = self.leftRotate(root.left)
-            return self.rightRotate(root)
-
-        if balance < -1 and data < root.right.data:
-            root.right = self.rightRotate(root.right)
-            return self.leftRotate(root)
- 
-        return root
-
-    def leftRotate(self, z):
- 
-        y = z.right
-        T2 = y.left
- 
-        # Perform rotation
-        y.left = z
-        z.right = T2
- 
-        # Update heights
-        z.height = 1 + max(self.getHeight(z.left),
-                         self.getHeight(z.right))
-        y.height = 1 + max(self.getHeight(y.left),
-                         self.getHeight(y.right))
- 
-        # Return the new root
-        return y
- 
-    def rightRotate(self, z):
- 
-        y = z.left
-        T3 = y.right
- 
-        # Perform rotation
-        y.right = z
-        z.left = T3
- 
-        # Update heights
-        z.height = 1 + max(self.getHeight(z.left),
-                        self.getHeight(z.right))
-        y.height = 1 + max(self.getHeight(y.left),
-                        self.getHeight(y.right))
- 
-        # Return the new root
-        return y
- 
-    def getHeight(self, root):
-        if not root:
-            return 0
- 
-        return root.height
- 
-    def getBalance(self, root):
-        if not root:
-            return 0
- 
-        return self.getHeight(root.left) - self.getHeight(root.right)
- 
-    def preOrder(self, root):
- 
-        if not root:
-            return
- 
-        print("{0} ".format(root.data), end="")
-        self.preOrder(root.left)
-        self.preOrder(root.right)
-
-def printTree( root, level = 0):
-    if root != None:
-        printTree(root.right, level + 1)
-        print('     ' * level, root.data)
-        printTree(root.left, level + 1)
-
-T = AVL_Tree()
-root = None
-inp = input("Enter Input : ").split(" ")
+T = BST()
+inp = input('Enter Input : ').split(" ")
 a = inp[-1].split("/")
 inp[-1] = a[0]
-n = a[1]
+n = int(a[1])
 
-for i in inp :
-
-    if i == "/":
-        break
-    root = T.insert(i)
-    printTree(root)
+for i in inp:
+    root = T.insert(int(i))
+    T.printTree(root,0)
     print("--------------------------------------------------")
 
-T.preOrder(root)
+result = T.closest_value(root, n)
+print("Closest value of",n,":", result)
